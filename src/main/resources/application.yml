@@ -14,8 +14,8 @@ spring:
     mail:
       host: smtp.gmail.com
       port: 587
-      username: "이메일 발신할 이메일 주소"
-      password:
+#      username: "이메일 발신할 이메일 주소"
+#      password:
       properties:
         mail:
           smtp:
