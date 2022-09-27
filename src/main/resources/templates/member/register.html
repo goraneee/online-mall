@@ -4,6 +4,9 @@
   <meta charset="UTF-8">
   <title>회원가입 페이지</title>
 </head>
+
+
+
 <body>
 <h1>회원 가입</h1>
 <div>
@@ -11,7 +14,7 @@
     <table>
       <tbody>
         <tr>
-          <th>아이디</th>
+          <th>ID</th>
           <td> <input type = "email" name="userId" placeholder="아이디(이메일)입력" required/></td>
         </tr>
         <tr>
@@ -19,13 +22,11 @@
           <td><input type = "text" name="userName" placeholder="이름 입력" required/>
           </td>
         </tr>
-
         <tr>
           <th>연락처</th>
           <td><input type = "tel" name="phone" placeholder="전화번호 입력" required/>
           </td>
         </tr>
-
         <tr>
           <th>비밀번호</th>
           <td><input type = "password" name="password" placeholder="비밀번호 입력" required/>
@@ -34,19 +35,19 @@
 
         <tr>
           <th>비밀번호 확인</th>
-          <td><input type = "password" name="password" placeholder="비밀번호 입력" required/>
+          <td><input type = "password" name="rePassword" placeholder="비밀번호 확인" required/>
           </td>
         </tr>
         <tr>
           <th>주소</th>
           <td>
             <div>
-              <input type="text" id="zipcode" name="zipcode" th:value="${}"  _readonly placeholder="우편번호 입력"/>
+              <input type="text" id="zipcode" name="zipcode" readonly placeholder="우편번호 입력"/>
               <button onclick="execDaumPostcode()" type="button">우편 번호 찾기</button>
             </div>
             <div>
-<!--              <input type="text" id="addr" name="addr" th:value="${detail}" _readonly placeholder="주소 입력">-->
-<!--              <input type="text" id="addrDetail" name="addrDetail" th:value="${detail.addrDetail}" placeholder="상세 주소 입력">-->
+              <input type="text" id="addr" name="addr"  readonly placeholder="주소 입력">
+              <input type="text" id="addrDetail" name="addrDetail" placeholder="상세 주소 입력">
             </div>
           </td>
         </tr>

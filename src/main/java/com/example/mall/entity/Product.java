@@ -1,13 +1,21 @@
-package com.example.mall.product;
+package com.example.mall.entity;
 
-import com.example.mall.category.Category;
+import com.example.mall.entity.Category;
 import java.time.LocalDateTime;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
 
 @Entity
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Product {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)       // auto
@@ -17,7 +25,10 @@ public class Product {
     private Integer price;      // 상품 가격
     private Boolean soldOutYN;  // 품절 여부
     private String productImg;  // 상품 이미지
-    private Category category;  // 옵션으로 선택가능
+
+    //
+    @Enumerated(EnumType.STRING)
+    private Category category;  // 딱 한개
 
 
     // 재고 관련 사항

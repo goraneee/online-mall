@@ -32,6 +32,8 @@ dependencies {
 //    추가한 부분
     implementation 'org.mariadb.jdbc:mariadb-java-client'
 
+//    implementation 'org.springframework.boot:spring-boot-starter-mail:2.5.4'
+
 
     compileOnly 'org.projectlombok:lombok'
     runtimeOnly 'com.h2database:h2'

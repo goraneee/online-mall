@@ -5,10 +5,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface MemberRepository extends JpaRepository<Member, String> {
+public interface MemberRepository extends JpaRepository<Member, String> { // 멤버클래스와 pk의 타입
 
-//    Optional<Member> findByEmailAuthKey(String emailAuthKey);
-    Optional<Member> findByUserIdAndUserName(String userId, String userName);
-    Optional<Member> findByResetPasswordKey(String resetPasswordKey);
     Optional<Member> findByUserId(String userId);
+
+    Optional<Member> findByEmailAuthKey(String emailAuthKey);
 }

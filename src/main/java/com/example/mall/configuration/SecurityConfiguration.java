@@ -2,6 +2,7 @@
 package com.example.mall.configuration;
 
 
+import com.example.mall.repository.LoginHistoryRepository;
 import com.example.mall.repository.MemberRepository;
 import com.example.mall.service.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -17,12 +18,14 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
+@Configuration
 @RequiredArgsConstructor
 @EnableWebSecurity
-@Configuration
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
-    private  final MemberService memberService;
-//    private  final LoginHistoryRepository loginHistoryRepository;
+
+//    해제하면 순환 참조 문제가 발생한다.
+//    private  final MemberService memberService;
+    private  final LoginHistoryRepository loginHistoryRepository;
     private  final MemberRepository memberRepository;
 
 
@@ -31,19 +34,20 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
 
-//    @Bean
-//    UserAuthenticationFailureHandler getFailureHandler(){
-//        return  new UserAuthenticationFailureHandler();
-//    }
+    // 로그인 실패
+    @Bean
+    UserAuthenticationFailureHandler getFailureHandler(){
+        return  new UserAuthenticationFailureHandler();
+    }
 
-    // 성공 핸들러 추가한다.
-//    @Bean
-//    UserAuthenticationSuccessHandler getSuccessHandler(){
-//        return  new UserAuthenticationSuccessHandler(loginHistoryRepository, memberRepository);
-//    }
+    // 로그인 성공
+    @Bean
+    UserAuthenticationSuccessHandler getSuccessHandler(){
+        return  new UserAuthenticationSuccessHandler(loginHistoryRepository, memberRepository);
+    }
 
     @Override
-    public   void configure(WebSecurity web) throws Exception {
+    public void configure(WebSecurity web) throws Exception {
         web.ignoring().antMatchers("/favicon.ico", "/files/**");
         super.configure(web);
     }
@@ -53,13 +57,15 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
         http.csrf().disable();      // csrf: 토큰
         http.headers().frameOptions().sameOrigin();
-        http.authorizeRequests()
+
+        // 로그인 없이 접속 가능한 url
+        http.authorizeRequests()        // 주소에 대한 권한 설정
                 .antMatchers(
                         "/"
                         , "/member/register"
                         , "/member/email-auth"
                         , "/member/find-password"
-//                        , "/member/reset/password"
+//                        , "/member/reset/password"        // 없어도 될듯
 //                        , "/admin"
                 )
                 .permitAll();
@@ -68,16 +74,18 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                         .antMatchers("/admin/**")
                         .hasAnyAuthority("ROLE_ADMIN");
 
+
+        // 로그인 페이지에서 성공시 처리, 실패시 처리를 다르게 설정해둔다.
         http.formLogin()
                 .loginPage("/member/login")
-//                .failureHandler(getFailureHandler())
-//                .successHandler(getSuccessHandler())
+                .failureHandler(getFailureHandler())
+                .successHandler(getSuccessHandler())
                 .permitAll();
 
         http.logout()
                 .logoutRequestMatcher(new AntPathRequestMatcher("/member/logout"))
                 .logoutSuccessUrl("/")          // 로그아웃 성공하면 메인페이지 이동
-                .invalidateHttpSession(true);   // 로그아웃했으니 새션 초기화
+                .invalidateHttpSession(true);   // 로그아웃했으니 세션을 초기화 ??
 
         // 추가 - 접근 제한
         http.exceptionHandling()
@@ -85,15 +93,14 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         super.configure(http);
     }
 
-//    @Override
-//    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-//        auth.userDetailsService(memberService)
-//                .passwordEncoder(getPasswordEncoder());
-//        super.configure(auth);
-//
-//
-//        auth.userDetailsService(memberService).passwordEncoder()
-//    }
+/* 멤버서비스에서 오류 나는 중
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(memberService)
+                .passwordEncoder(getPasswordEncoder());
+        super.configure(auth);
+    }
+*/
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {

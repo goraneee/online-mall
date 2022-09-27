@@ -2,13 +2,25 @@ package com.example.mall.service;
 
 import com.example.mall.entity.Member;
 import com.example.mall.model.MemberInput;
+import com.example.mall.model.ResetPasswordInput;
 import java.util.List;
+import javax.servlet.http.HttpServletRequest;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 public interface MemberService {
 
 
+
+    // 로그인
+    boolean authenticate(MemberInput parameter);
+
     boolean register(MemberInput parameter);
+//    UserDetails loadUserByUsername(String username) throws UsernameNotFoundException;
+
+//    Member login(MemberInput parameter, HttpServletRequest httpServletRequest);
+
 
     /**
      * uuid에 해당하는 계정을 활성화한다.
@@ -20,7 +32,8 @@ public interface MemberService {
     /**
      * 입력한 이메일로 비밀번호 초기화 정보를 전송
      */
-//    boolean sendResetPassword(ResetPasswordInput parameter);
+    boolean sendResetPassword(ResetPasswordInput parameter);
+
 
 
     /**

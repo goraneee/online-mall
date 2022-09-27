@@ -1,10 +1,42 @@
+
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko"  xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
-  <title>로그인 페이지</title>
+  <title>회원 로그인</title>
 </head>
 <body>
-<h1>로그인 페이지</h1>
+<h1>회원 로그인</h1>
+
+<div th:replace="/fragments/layout.html :: fragment-body-menu" ></div>
+<div th:text="${errorMessage}">
+<!-- UserAuthenticationFailureHandler 에서 넘겨 받은 변수-->
+</div>
+
+<div class="login">
+  <form method="post">
+
+    <table>
+      <tbody>
+        <tr>
+          <th>ID</th>
+          <td><input type="email" name="userId" placeholder="아이디(이메일)을 입력해주세요"/></td>
+        </tr>
+        <tr>
+          <th>Password</th>
+          <td><input type="password" name="password" placeholder="비밀번호 입력"/></td>
+        </tr>
+
+      </tbody>
+    </table>
+    <p/>
+    <div>
+      <button type="submit" >로그인</button>
+    </div>
+     <a href="/member/find-password">비밀번호 찾기</a>
+    <div>
+    </div>
+  </form>
+</div>
 </body>
 </html>
