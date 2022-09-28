@@ -10,7 +10,7 @@ import lombok.ToString;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class MemberInput {
+public class MemberInput extends CommonParam {
 
     private String userId;
     private String userName;
@@ -23,4 +23,11 @@ public class MemberInput {
     private String zipcode; // 우편 번호
     private String addr; //
     private String addrDetail; //
+
+
+    // 페이징 위한 추가 컬럼
+    long totalCount;
+    long seq;
+
+
 }

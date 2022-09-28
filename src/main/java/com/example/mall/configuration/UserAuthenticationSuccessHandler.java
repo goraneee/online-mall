@@ -42,8 +42,7 @@ public class UserAuthenticationSuccessHandler extends SimpleUrlAuthenticationSuc
 //        String id = memberService.detail(userId);
 //        MemberDto memberDto = memberService.detail(userId);
 
-
-        Optional<Member> member = memberRepository.findById(userId);
+        Optional<Member> member = memberRepository.findByUserId(userId);
         Member m = member.get();
         m.setLastLoginTime(LocalDateTime.now());
         memberRepository.save(m);

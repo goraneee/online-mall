@@ -65,17 +65,26 @@ class MemberController {
     public String loginSubmit(HttpServletRequest request,
                               Model model,
                               MemberInput memberInput){
+
+
+        /*
         boolean errorMessage = false;
         if(!memberService.authenticate(memberInput)){
-            model.addAttribute("errorMassage", errorMessage);
+//            model.addAttribute("errorMassage", errorMessage);
             return "member/login";
         }
         // 로그인 성공하면
         errorMessage = true;
-        model.addAttribute("errorMassage", errorMessage);
+//        model.addAttribute("errorMassage", errorMessage);
+
+
+         */
 
         return "index";
     }
+
+
+
 
 
     // 이메일 인증

@@ -4,12 +4,9 @@ import com.example.mall.entity.Member;
 import com.example.mall.model.MemberInput;
 import com.example.mall.model.ResetPasswordInput;
 import java.util.List;
-import javax.servlet.http.HttpServletRequest;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.stereotype.Service;
+import org.springframework.security.core.userdetails.UserDetailsService;
 
-public interface MemberService {
+public interface MemberService  extends UserDetailsService {
 
 
 
@@ -50,7 +47,7 @@ public interface MemberService {
     /**
      * 회원 목록을 가져온다. - 관리자에서만 사용 가능
      */
-//    List<MemberDto> list(MemberParam memberParam);
+    List<Member> list(MemberInput memberParam);    // 매퍼 클래스 말고 JPA로 처리하기
 
     /**
      * 회원 상세 정보
