@@ -5,9 +5,12 @@ package com.example.mall.configuration;
 import com.example.mall.repository.LoginHistoryRepository;
 import com.example.mall.repository.MemberRepository;
 import com.example.mall.service.MemberService;
+import com.example.mall.service.MemberServiceImpl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -23,15 +26,22 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-//    해제하면 순환 참조 문제가 발생한다.
-//    private  final MemberService memberService;
+//    해제하면 순환 참조 문제가 발생한다. => 해결하기
+    private  final MemberService memberService;
     private  final LoginHistoryRepository loginHistoryRepository;
     private  final MemberRepository memberRepository;
 
 
+    // 앱컨피그에도 똑같이 추가한다.
     @Bean
     PasswordEncoder getPasswordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    // 로그인 성공
+    @Bean
+    UserAuthenticationSuccessHandler getSuccessHandler(){
+        return new UserAuthenticationSuccessHandler(loginHistoryRepository, memberRepository);
     }
 
     // 로그인 실패
@@ -40,11 +50,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         return  new UserAuthenticationFailureHandler();
     }
 
-    // 로그인 성공
-    @Bean
-    UserAuthenticationSuccessHandler getSuccessHandler(){
-        return  new UserAuthenticationSuccessHandler(loginHistoryRepository, memberRepository);
-    }
 
     @Override
     public void configure(WebSecurity web) throws Exception {
@@ -75,13 +80,15 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                         .hasAnyAuthority("ROLE_ADMIN");
 
 
-        // 로그인 페이지에서 성공시 처리, 실패시 처리를 다르게 설정해둔다.
+        // 로그인
+        // 성공 시 / 실패 시 처리를 다르게 설정
         http.formLogin()
                 .loginPage("/member/login")
-                .failureHandler(getFailureHandler())
                 .successHandler(getSuccessHandler())
+                .failureHandler(getFailureHandler())
                 .permitAll();
 
+        // 로그아웃
         http.logout()
                 .logoutRequestMatcher(new AntPathRequestMatcher("/member/logout"))
                 .logoutSuccessUrl("/")          // 로그아웃 성공하면 메인페이지 이동
@@ -93,14 +100,15 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         super.configure(http);
     }
 
-/* 멤버서비스에서 오류 나는 중
+    // 회원 인증
+
+
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(memberService)
                 .passwordEncoder(getPasswordEncoder());
         super.configure(auth);
     }
-*/
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
