@@ -1,16 +1,20 @@
-package com.example.mall.entity;
+package com.example.mall.member.entity;
 
+import com.example.mall.entity.Cart;
+import com.example.mall.entity.Coupon;
+import com.example.mall.entity.Order;
+import com.example.mall.entity.enumType.UserGrade;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,7 +25,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Member implements MemberCode{
+public class Member implements MemberCode {
 
     @Id    @GeneratedValue
     private Long id;
@@ -43,27 +47,22 @@ public class Member implements MemberCode{
     private boolean emailAuthYn;
     private LocalDateTime emailAuthDt;
     private String emailAuthKey;
-
     private String resetPasswordKey;
     private LocalDateTime resetPasswordLimitDt; //초기화  가능한 날짜
 
+    // 등급과 조건
+    @Enumerated(EnumType.STRING)
+    private UserGrade userGrade; // 회원 등급
+    private Long cumulativePurchases;  // 누적 구매액
 
-    //   연관 관계
+    // 연관 관계
     @OneToOne(cascade = CascadeType.ALL)    // 추가하면 member 테이블이 달라질 때, cart도 달라진다.
-    @JoinColumn(name = "CART_ID")   // 카트의 변수명과 달라도되나???
+    @JoinColumn(name = "CART_ID")
     private Cart cart;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "COUPON_ID")   // 카트의 변수명과 달라도되나???
-    private Coupon coupon;
+    @OneToMany
+    private List<Coupon> couponList;
 
-
-    // 추가사항: 누적 구매액, 회원 등급
-
-
-
-
-
-
-
+    @OneToMany
+    private List<Order> orderList = new ArrayList<>();
 }
