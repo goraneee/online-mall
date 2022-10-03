@@ -9,11 +9,10 @@ public interface ProductService {
     /**
      * 상품 신규 추가
      */
-    boolean add(ProductInput product);   // 인풋으로 바꿔야할 수도 있다.
+    boolean add(ProductInput product);
 
     /**
      * 상품 수정
-     * 상품명,
      */
     boolean update(ProductInput parameter);
 

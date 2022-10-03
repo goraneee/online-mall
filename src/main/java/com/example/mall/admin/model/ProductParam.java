@@ -5,9 +5,5 @@ import lombok.Data;
 
 @Data
 public class ProductParam extends CommonParam {
-
-
     long id; // 상품 id
-
-
 }

@@ -39,33 +39,59 @@
     }
   </style>
 
+
 </head>
 <body>
 <h1>관리자 상품 리스트</h1>
 <div th:replace="/fragments/layout.html :: fragment-admin-body-menu"></div>
+
+
 <div class="list">
   <div class="search-form">
     <p class="total-count">전체 <span th:text="${totalCount}"></span>개 </p>
+
+    <a href="/admin/product/add.do">상품 추가</a>
+
     <form method="get">
       <select name="searchType">
         <option value="all">전체</option>
+
         <!--        상품을 검색하기 위한 수단  상품 이름 / 카테고리 / -->
-        <option th:selected="${#strings.equals(param.searchType, 'productId')}" value="productId">상품
-          No
+        <!--        문자열이 아닌 형태는 어떻게 처리하지???-->
+
+        <option th:selected="${#strings.equals(param.searchType, 'productId')}" value="productId">상품 No
         </option>
-        <option th:selected="${#strings.equals(param.searchType, 'productName')}"
-                value="productName">이름
+        <option th:selected="${#strings.equals(param.searchType, 'category')}" value="category">카테고리
+        </option>
+        <option th:selected="${#strings.equals(param.searchType, 'id')}" value="id">상품 id
+        </option>
+        <option th:selected="${#strings.equals(param.searchType, 'productName')}" value="productName">상품명
         </option>
         <option th:selected="${#strings.equals(param.searchType, 'price')}" value="price">가격
         </option>
+        <option th:selected="${#strings.equals(param.searchType, 'soldOutYn')}" value="soldOutYn">품절 여부
+        </option>
+        <option th:selected="${#strings.equals(param.searchType, 'productImg')}" value="productImg">상품 사진
+        </option>
+        <option th:selected="${#strings.equals(param.searchType, 'stockQuantity')}" value="stockQuantity">재고 수량
+        </option>
+        <option th:selected="${#strings.equals(param.searchType, 'stockedDt')}" value="stockedDt">입고 예정일
+        </option>
+<!--        <option th:selected="${#strings.equals(param.searchType, 'cumulativeSales')}" value="cumulativeSales">누적 판매량-->
+<!--        </option>-->
+
+
       </select>
       <input th:value="${param.searchValue}" type="search" name="searchValue" placeholder="검색어 입력"/>
       <button type="submit">검색</button>
     </form>
   </div>
+
+
   <table>
     <thead>
     <tr>
+
       <th>No</th>
       <th>카테고리</th>
       <th>상품 Id</th>
@@ -80,14 +106,14 @@
     </thead>
     <tbody>
     <tr th:each="x : ${list}">
-      <td th:th:text="${x.seq}"></td>
+      <td th:th:text="${x.id}">1</td>
       <td th:th:text="${x.category}"></td>
       <td th:text="${x.id}"></td>
       <td th:text="${x.productName}"></td>
       <td th:text="${x.price}"></td>
       <td th:text="${x.soldOutYn}"></td>
       <td th:text="${x.productImg}"></td>
-      <td th:text="${x.productQuantity}"></td>
+      <td th:text="${x.stockQuantity}"></td>
       <td th:text="${x.stockedDt}"></td>
       <td th:text="${x.cumulativeSales}"></td>
     </tr>

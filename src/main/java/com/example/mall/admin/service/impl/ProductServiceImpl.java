@@ -1,10 +1,10 @@
 package com.example.mall.admin.service.impl;
 
+import com.example.mall.admin.model.ProductDto;
+import com.example.mall.admin.model.ProductInput;
 import com.example.mall.admin.repository.ProductRepository;
 import com.example.mall.admin.service.ProductService;
 import com.example.mall.entity.Product;
-import com.example.mall.admin.model.ProductDto;
-import com.example.mall.admin.model.ProductInput;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -16,19 +16,20 @@ public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
 
-
     // 등록
     @Override
     public boolean add(ProductInput parameter) {
 
-        Product product = Product.builder()
-            .productName(parameter.getProductName())
-            .productImg(parameter.getProductImg())
-            .productQuantity(parameter.getProductQuantity())
-            .price(parameter.getPrice())
-            .category(parameter.getCategory())
+        Product product = Product.builder().productName(parameter.getProductName())
+            .productImg(parameter.getProductImg()).stockQuantity(parameter.getStockQuantity())
+            .price(parameter.getPrice()).category(parameter.getCategory())
             .stockedDt(parameter.getStockedDt())
+            .soldOutYn(false)
+            .cumulativeSales(0)
             .build();
+
+        // 재고 수량이 0일 때는 입고 예정일이 필요하다
+
 
         productRepository.save(product);
         return true;
@@ -40,17 +41,21 @@ public class ProductServiceImpl implements ProductService {
 
         Optional<Product> OptionalProduct = productRepository.findById(parameter.getId());
 
-        if (OptionalProduct.isPresent()){
+        if (OptionalProduct.isPresent()) {
             Product product = OptionalProduct.get();
             product.setProductImg(parameter.getProductImg());
             product.setProductName(parameter.getProductName());
-            product.setProductQuantity(parameter.getProductQuantity());
+            product.setStockQuantity(parameter.getStockQuantity());
             product.setCategory(parameter.getCategory());
             product.setPrice(parameter.getPrice());
             product.setStockedDt(parameter.getStockedDt());
-        }
-        return true;
+            productRepository.save(product);
+            return true;
+          }
+
+        return false;
     }
+
     // 삭제
     @Override
     public boolean delete(long id) {
@@ -60,11 +65,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
 
-// 어떤 필드 "sortValue"에 대해 내림차순 리스트를 정렬할 때 이용하는 메서드
-//    private Sort getSortBySortValueDesc(){
-//        return Sort.by(Sort.Direction.DESC, "sortValue");   // 내림차순?
-//    }
-
+    // 모든 상품에 대해 보여준다.
     @Override
     public List<ProductDto> list() {
         return ProductDto.of(productRepository.findAll());
