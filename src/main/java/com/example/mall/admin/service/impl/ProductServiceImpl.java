@@ -2,6 +2,7 @@ package com.example.mall.admin.service.impl;
 
 import com.example.mall.admin.model.ProductDto;
 import com.example.mall.admin.model.ProductInput;
+import com.example.mall.admin.model.ProductParam;
 import com.example.mall.admin.repository.ProductRepository;
 import com.example.mall.admin.service.ProductService;
 import com.example.mall.entity.Product;
@@ -27,9 +28,7 @@ public class ProductServiceImpl implements ProductService {
             .soldOutYn(false)
             .cumulativeSales(0)
             .build();
-
         // 재고 수량이 0일 때는 입고 예정일이 필요하다
-
 
         productRepository.save(product);
         return true;
@@ -69,5 +68,18 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<ProductDto> list() {
         return ProductDto.of(productRepository.findAll());
+    }
+
+
+    // 특정 상품
+    @Override
+    public List<ProductDto> list(ProductParam parameter) {
+
+        if(parameter.getId() < 1){
+            List<Product> productList = productRepository.findAll();
+            return ProductDto.of(productList);
+        }
+//       Optional<Product> optionalProduct = productRepository.findById(parameter.getId());
+        return null;
     }
 }

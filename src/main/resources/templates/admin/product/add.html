@@ -57,7 +57,8 @@
 
       </tbody>
     </table>
-    <button>상품 추가</button>
+    <button th:if="${editMode}">상품 수정</button>
+    <button th:if="${!editMode}">상품 추가</button>
   </form>
 </div>
 </body>

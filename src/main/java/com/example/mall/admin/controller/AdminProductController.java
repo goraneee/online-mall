@@ -26,8 +26,6 @@ public class AdminProductController extends BaseController {
     private final ProductService productService;
     private final ProductRepository productRepository;
 
-
-    // list.do/{searcjhType}을 추가해야되나??
     @GetMapping("/admin/product/list.do")
     public String list(HttpServletRequest request,
                         Model model,
@@ -55,7 +53,15 @@ public class AdminProductController extends BaseController {
         return "admin/product/list";
     }
 
-    @GetMapping(value = {"/admin/product/add.do", "/admin/product/edit.do"})
+    /* searchValue, searchType 상품 검색
+    @GetMapping("/admin/product/list.do")
+    public String searchList(HttpServletRequest request,
+        Model model,
+        ProductParam param) {
+    }
+     */
+
+        @GetMapping(value = {"/admin/product/add.do", "/admin/product/edit.do/{id}"})
     public String list(HttpServletRequest request,
                        Model model,
                        ProductInput parameter){
@@ -63,25 +69,25 @@ public class AdminProductController extends BaseController {
         boolean editMode = request.getRequestURI().contains("/edit.do");
         ProductDto detail = new ProductDto();
 
+        // repository에 존재하지 않는 id의 경우 예외 처리를 한다.
         if(editMode){
             long id = parameter.getId();
             Product existProduct = productRepository.findById(id).get();
             ProductDto productDto =  ProductDto.of(existProduct);
 
             if(existProduct == null){
-                model.addAttribute("message", "수정할 상품 정보가 없습니다.");
+//                model.addAttribute("message", "수정할 상품 정보가 없습니다.");
+                System.out.println("수정할 상품 정보가 없습니다.");
                 return "admin/product/list";
             }
             detail = productDto;
         }
-
         model.addAttribute("editMode", editMode);
         model.addAttribute("detail", detail);
         return "admin/product/add";
     }
 
-
-    @PostMapping(value = {"/admin/product/add.do", "/admin/product/edit.do"})
+    @PostMapping(value = {"/admin/product/add.do", "/admin/product/edit.do/{id}"})
     public String addProduct(  Model model,
                                ProductInput parameter,
                                Principal principal,
@@ -90,6 +96,10 @@ public class AdminProductController extends BaseController {
         boolean editMode = request.getRequestURI().contains("/edit.do");
         boolean result = false;
 
+        if(!productRepository.existsById(parameter.getId())){
+            System.out.println("존재하지 않는 상품 번호입니다.");
+            return "admin/product/list";
+        }
 
         // edit 모드
         if(editMode) {
@@ -107,11 +117,7 @@ public class AdminProductController extends BaseController {
             }
         }else{      // 상품 추가
             result = productService.add(parameter);
-        }
 
-        if(!result){
-            System.out.println("상품 등록에 실패했습니다.");
-            return "error/denied";
         }
 
         model.addAttribute("result", result);
