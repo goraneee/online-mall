@@ -2,6 +2,7 @@ package com.example.mall.admin.service;
 
 import com.example.mall.admin.model.ProductDto;
 import com.example.mall.admin.model.ProductInput;
+import com.example.mall.admin.model.ProductParam;
 import java.util.List;
 
 public interface ProductService {
@@ -9,11 +10,10 @@ public interface ProductService {
     /**
      * 상품 신규 추가
      */
-    boolean add(ProductInput product);   // 인풋으로 바꿔야할 수도 있다.
+    boolean add(ProductInput product);
 
     /**
      * 상품 수정
-     * 상품명,
      */
     boolean update(ProductInput parameter);
 
@@ -27,5 +27,12 @@ public interface ProductService {
      * 상품 리스트
      */
     List<ProductDto> list();
+
+
+
+    /**
+     * 상품 (검색) 리스트
+     */
+    List<ProductDto> list(ProductParam parameter);
 
 }

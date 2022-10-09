@@ -24,10 +24,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Product {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)       // auto
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)       // auto
     private Long id;
 
-    private String productName;
+    private String productName; // 유일한 값을 줘야되나?
     private Integer price;      // 상품 가격
     private Boolean soldOutYn;  // 품절 여부
     private String productImg;  // 상품 이미지 주소 ??
@@ -35,28 +36,16 @@ public class Product {
     @Enumerated(EnumType.STRING)
     private Category category;  // 딱 한개
 
-
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "CART_ID")   // 외래 키 매핑 - CART 테이블의 PK id와 JOIN
     private Cart cart;
 
-
-
     // 재고 관련 사항
-    private Integer productQuantity;    // 재고 수량 => 주문할 마다 (-)
-    private LocalDateTime stockedDt;  // 입고 예정일 => 매월 초, 한 번에 1000 개씩 들어온다 가정?
-
+    private int stockQuantity;    // 재고 수량 => 주문할 마다 (-)
+    private LocalDateTime stockedDt;  // 입고 예정일 => 매월 초, 한 번에 1000 개씩 들어온다 가정
 
     // 추가 컬럼
     private Integer cumulativeSales;    // 상품별 누적 판매 개수 => 주문할 마다 (+)
-
-
-
-
-
-
-
-
 
 }
 

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>관리자</title>
+</head>
+<body>
+<h1 th:if="${editMode}">상품 관리 - 수정</h1>
+<h1 th:if="${editMode eq false}">상품 관리 -등록</h1>
+<div th:replace="/fragments/layout.html :: fragment-admin-body-menu"></div>
+
+<div class = "detail">
+  <form id="addForm" method="post">
+    <table>
+      <tbody>
+              <tr>
+                <th>상품명</th>
+                <td><input th:value="${detail.productName}" type="text" name="productName"
+                           placeholder="상품명 입력" required/></td>
+              </tr>
+
+              <tr>
+                <th>상품 가격</th>
+                <td><input th:value="${detail.price}" type="number" name="price"
+                           placeholder="상품 가격 입력" required/></td>
+              </tr>
+
+              <tr>
+                <th>상품 사진</th>
+                <td><input th:value="${detail.productImg}" type="text" name="productImg"
+                           placeholder="상품 사진 등록" required/></td>
+              </tr>
+
+              <tr>
+                <th>카테고리 선택</th>
+                <td>
+                  <select name="category" required>
+                    <option value="">카테고리 선택</option>
+
+                    <option value="CATEGORY_OUTER">OUTER</option>
+                    <option value="CATEGORY_TOP">TOP</option>
+                    <option value="CATEGORY_PANTS">PANTS</option>
+                    <option value="CATEGORY_SKIRT">SKIRT</option>
+                    <option value="CATEGORY_SHOES">SHOES</option>
+                    <option value="CATEGORY_BAG">BAG</option>
+                    <option value="CATEGORY_HEADWEAR">HEADWEAR</option>
+                    <option value="CATEGORY_UNDERWEAR">UNDERWEAR</option>
+                    <option value="CATEGORY_ACCESSORY">ACCESSORY</option>
+                  </select>
+                </td>
+              </tr>
+              <tr>
+                <th>재고 수량</th>
+                <td><input th:value="${detail.stockQuantity}" type="text" name="stockQuantity"
+                           placeholder="재고 수량" required/></td>
+              </tr>
+
+      </tbody>
+    </table>
+    <button th:if="${editMode}">상품 수정</button>
+    <button th:if="${!editMode}">상품 추가</button>
+  </form>
+</div>
+</body>
+</html>
