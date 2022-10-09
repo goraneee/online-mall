@@ -4,15 +4,13 @@ import com.example.mall.admin.model.ProductDto;
 import com.example.mall.admin.model.ProductInput;
 import com.example.mall.admin.model.ProductParam;
 import com.example.mall.admin.repository.ProductRepository;
-import com.example.mall.admin.service.ProductService;
+import com.example.mall.admin.service.AdminProductService;
 import com.example.mall.controller.BaseController;
 import com.example.mall.entity.Product;
-import com.example.mall.member.service.MemberService;
 import java.security.Principal;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,16 +21,16 @@ import org.springframework.web.bind.annotation.PostMapping;
 public class AdminProductController extends BaseController {
 
 
-    private final ProductService productService;
+    private final AdminProductService adminProductService;
     private final ProductRepository productRepository;
 
     @GetMapping("/admin/product/list.do")
     public String list(HttpServletRequest request,
-                        Model model,
+                       Model model,
                        ProductParam param) {
 
         param.init();   // 페이지 초기화
-        List<ProductDto> list = productService.list();
+        List<ProductDto> list = adminProductService.list();
 
         // 검색 타입 데이터 추가하기
         //        param.getSearchType();
@@ -61,8 +59,8 @@ public class AdminProductController extends BaseController {
     }
      */
 
-        @GetMapping(value = {"/admin/product/add.do", "/admin/product/edit.do/{id}"})
-    public String list(HttpServletRequest request,
+    @GetMapping(value = {"/admin/product/add.do", "/admin/product/edit.do/{id}"})
+    public String add(HttpServletRequest request,
                        Model model,
                        ProductInput parameter){
 
@@ -88,10 +86,10 @@ public class AdminProductController extends BaseController {
     }
 
     @PostMapping(value = {"/admin/product/add.do", "/admin/product/edit.do/{id}"})
-    public String addProduct(  Model model,
-                               ProductInput parameter,
-                               Principal principal,
-                               HttpServletRequest request) {
+    public String addSubmit(Model model,
+                           ProductInput parameter,
+                           Principal principal,
+                           HttpServletRequest request) {
 
         boolean editMode = request.getRequestURI().contains("/edit.do");
         boolean result = false;
@@ -106,7 +104,7 @@ public class AdminProductController extends BaseController {
             long id = parameter.getId();
             Product existProduct = productRepository.findById(id).get();
             ProductDto productDto = ProductDto.of(existProduct);
-            productService.update(parameter);
+            adminProductService.update(parameter);
 
             if (existProduct == null) {
                 model.addAttribute("message", "수정할 상품 정보가 없습니다.");
@@ -116,28 +114,25 @@ public class AdminProductController extends BaseController {
                 return "admin/product/list";
             }
         }else{      // 상품 추가
-            result = productService.add(parameter);
-
+            result = adminProductService.add(parameter);
         }
-
         model.addAttribute("result", result);
         model.addAttribute("detail", parameter);
-
         return "redirect:/admin/product/list.do";
     }
 
     @PostMapping("/admin/product/delete.do")
     public String del(Model model, ProductInput parameter) {
-        boolean result = productService.delete(parameter.getId());
+        boolean result = adminProductService.delete(parameter.getId());
         return "redirect:/admin/product/list.do";
     }
 
 
-    @PostMapping("/admin/product/update.do")
-    public String update(Model model, ProductInput parameter) {
-
-        boolean result = productService.update(parameter);
-        return "redirect:/admin/product/list.do";
-    }
+//    @PostMapping("/admin/product/update.do")
+//    public String update(Model model, ProductInput parameter) {
+//
+//        boolean result = productService.update(parameter);
+//        return "redirect:/admin/product/list.do";
+//    }
 
 }
