@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>회원별 장바구니 리스트</title>
+</head>
+<body>
+<h1>나의 장바구니</h1>
+<div th:replace="/fragments/layout.html :: fragment-body-menu"></div>
+<div class="list">
+
+<!--  <p class="total-count">전체 <span th:text="${totalCount}"></span>개 </p>-->
+
+  <table>
+    <thead>
+    <tr>
+      <!--      <th>No</th>-->
+      <th>카테고리</th>
+      <th>상품 Id</th>
+      <th>상품명</th>
+      <th>가격</th>
+      <th>품절 여부</th>
+      <th>상품 사진</th>
+      <th>재고 수량</th>
+      <th>입고 예정일</th>
+      <!--      <th>누적 판매량</th>-->
+
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="x : ${list}">
+      <!--      <td th:th:text="${x.id}">1</td>-->
+      <td th:th:text="${x.category }"></td>
+      <td th:text="${x.id}"></td>
+      <td th:text="${x.productName}"></td>
+      <td th:text="${x.price}"></td>
+      <td th:text="${x.soldOutYn}"></td>
+      <td th:text="${x.productImg}"></td>
+      <td th:text="${x.stockQuantity}"></td>
+      <td th:text="${x.stockedDt}"></td>
+
+    </tr>
+    </tbody>
+  </table>
+</div>
+
+
+</body>
+</html>
+
+
+

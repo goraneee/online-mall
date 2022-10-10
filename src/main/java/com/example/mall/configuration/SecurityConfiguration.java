@@ -2,15 +2,12 @@
 package com.example.mall.configuration;
 
 
+import com.example.mall.member.repository.MemberRepository;
 import com.example.mall.repository.LoginHistoryRepository;
-import com.example.mall.repository.MemberRepository;
-import com.example.mall.service.MemberService;
-import com.example.mall.service.MemberServiceImpl;
+import com.example.mall.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -26,11 +23,9 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-//    해제하면 순환 참조 문제가 발생한다. => 해결하기
-    private  final MemberService memberService;
-    private  final LoginHistoryRepository loginHistoryRepository;
-    private  final MemberRepository memberRepository;
-
+    private final MemberService memberService;
+    private final LoginHistoryRepository loginHistoryRepository;
+    private final MemberRepository memberRepository;
 
     // 앱컨피그에도 똑같이 추가한다.
     @Bean
@@ -50,7 +45,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         return  new UserAuthenticationFailureHandler();
     }
 
-
+    // 권한 설정
     @Override
     public void configure(WebSecurity web) throws Exception {
         web.ignoring().antMatchers("/favicon.ico", "/files/**");
@@ -75,13 +70,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 )
                 .permitAll();
 
+        // 관리자
         http.authorizeRequests()
                         .antMatchers("/admin/**")
                         .hasAnyAuthority("ROLE_ADMIN");
 
-
-        // 로그인
-        // 성공 시 / 실패 시 처리를 다르게 설정
+        // 로그인 성공 시 / 실패 시 처리를 다르게 설정
         http.formLogin()
                 .loginPage("/member/login")
                 .successHandler(getSuccessHandler())
@@ -92,7 +86,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.logout()
                 .logoutRequestMatcher(new AntPathRequestMatcher("/member/logout"))
                 .logoutSuccessUrl("/")          // 로그아웃 성공하면 메인페이지 이동
-                .invalidateHttpSession(true);   // 로그아웃했으니 세션을 초기화 ??
+                .invalidateHttpSession(true);   // 로그아웃했으니 세션을 초기화한다.
 
         // 추가 - 접근 제한
         http.exceptionHandling()
@@ -101,8 +95,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
 
     // 회원 인증
-
-
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(memberService)

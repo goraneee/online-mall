@@ -66,15 +66,6 @@ public class PageUtil {
         this.queryString = queryString;
     }
 
-//    public PageUtil(long totalCount, long pageIndex, String queryString, long pageSize, long pageBlockSize) {
-//        this.totalCount = totalCount;
-//        this.pageSize = pageSize;
-//        this.queryString = queryString;
-//        this.pageBlockSize = pageBlockSize;
-//        this.pageIndex = pageIndex;
-//    }
-
-
     public PageUtil(long totalCount, long pageIndex, String queryString, long pageSize,
         long pageBlockSize) {
         this.totalCount = totalCount;
@@ -88,13 +79,14 @@ public class PageUtil {
 
         init();
 
-        //System.out.println("=====페이징 출력!!!");
-        //System.out.println("한페이지 개수: " + pageSize + ", 페이지블럭 개수: " + pageBlockSize);
-        //System.out.println(String.format("%d/%d (%d)", pageIndex, totalBlockCount, totalCount));
-        //System.out.println(String.format("%d - %d", startPage, endPage));
+        /* 페이징 기능 확인
+        System.out.println("=====페이징 출력!!!");
+        System.out.println("한페이지 개수: " + pageSize + ", 페이지블럭 개수: " + pageBlockSize);
+        System.out.println(String.format("%d/%d (%d)", pageIndex, totalBlockCount, totalCount));
+        System.out.println(String.format("%d - %d", startPage, endPage));
+        */
 
         StringBuilder sb = new StringBuilder();
-
         long previousPageIndex = startPage > 1 ? startPage - 1 : 1;
         long nextPageIndex = endPage < totalBlockCount ? endPage + 1 : totalBlockCount;
 

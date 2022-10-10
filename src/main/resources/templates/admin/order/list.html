@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>관리자</title>
+  <style>
+    .list table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .list table th, .list table td {
+      border: solid 1px #000;
+    }
+  </style>
+
+</head>
+<body>
+<h1>관리자 주문 리스트</h1>
+<div th:replace="/fragments/layout.html :: fragment-admin-body-menu"></div>
+<p class="total-count">전체 <span th:text="${totalCount}"></span>개 </p>
+
+<div class="list">
+  <table>
+    <thead>
+    <tr>
+      <th>주문 번호(PK)</th>
+      <th>주문 날짜</th>
+      <th>주문자(PK)</th>
+<!--      <th>주문자 이름</th>-->
+<!--      <th>주문자 ID</th>-->
+      <th>받는 사람 이름</th>
+      <th>받는 사람 연락처</th>
+      <th>받는 사람 주소</th>
+      <th>받는 사람 상세 주소</th>
+      <th>받는 사람 우편 번호</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="x : ${list}">
+      <!--      <td th:th:text="${x.id}">1</td>-->
+      <td th:th:text="${x.id}"></td>
+      <td th:text="${x.orderDate}"></td>
+      <td th:th:text="${x.member.getId()}"></td>
+<!--      <td th:th:text="${x.member.getUserName()}"></td>-->
+<!--      <td th:th:text="${x.member.getUserId()}"></td>-->
+      <td th:text="${x.recipientName}"></td>
+      <td th:text="${x.recipientPhone}"></td>
+      <td th:text="${x.recipientAddr}"></td>
+      <td th:text="${x.recipientAddrDetail}"></td>
+      <td th:text="${x.recipientZipcode}"></td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+</body>
+</html>

@@ -1,7 +1,8 @@
 package com.example.mall.admin.model;
+
 import lombok.Data;
 
-// 페이징
+// paging 관련 클래스
 
 @Data
 public class CommonParam {
@@ -36,12 +37,12 @@ public class CommonParam {
 
         StringBuilder sb = new StringBuilder();
 
-        if(searchType != null && searchType.length() > 0){
+        if (searchType != null && searchType.length() > 0) {
             sb.append(String.format("searchType=%s", searchType));
         }
 
-        if(searchValue != null && searchValue.length() > 0){
-            if(sb.length() > 0){
+        if (searchValue != null && searchValue.length() > 0) {
+            if (sb.length() > 0) {
                 sb.append("&");
             }
             sb.append(String.format("searchValue=%s", searchValue));

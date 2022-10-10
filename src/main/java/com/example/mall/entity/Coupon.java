@@ -1,4 +1,6 @@
 package com.example.mall.entity;
+
+import com.example.mall.member.entity.Member;
 import java.time.LocalDateTime;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -6,7 +8,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,15 +21,17 @@ import lombok.NoArgsConstructor;
 @Data
 public class Coupon {
 
-    @Id  @GeneratedValue
+    @Id
+    @GeneratedValue
     private Long id;
 
-    @OneToOne(mappedBy = "coupon")
-    @JoinColumn
+    @ManyToOne
+    @JoinColumn(name = "member_id") // 쿠폰이 멤버를 가져올
     private Member member;
 
+    private Long discountAmount; // 할인 금액
+
     @Enumerated(EnumType.STRING)
-//    String으로 하면 SQL 오류가 난다.   ==> 해결하기
     private CouponType couponType;  // 쿠폰 종류
 
     private LocalDateTime couponRegDt;  // 쿠폰 등록일

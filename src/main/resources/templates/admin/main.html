@@ -5,15 +5,11 @@
   <title>관리자 메인 페이지</title>
 </head>
 <body>
-<h1>Online mall</h1>
+<h1>Online mall - 관리자</h1>
 <div>
-<!--  <a href="/member/register">회원가입</a>|-->
-<!--  <a href="/member/login">로그인</a>|-->
-<!--  <a href="/member/logout">로그아웃</a>-->
+  <!--  <div th:fragment="fragment-admin-body-menu"></div>-->
+  <div th:replace="/fragments/layout.html :: fragment-admin-body-menu">
+  </div>
 </div>
-<hr/>
-
-
-
 </body>
 </html>
