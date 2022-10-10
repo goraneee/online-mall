@@ -1,9 +1,9 @@
 package com.example.mall.configuration;
 
 import com.example.mall.entity.LoginHistory;
-import com.example.mall.entity.Member;
+import com.example.mall.member.entity.Member;
+import com.example.mall.member.repository.MemberRepository;
 import com.example.mall.repository.LoginHistoryRepository;
-import com.example.mall.repository.MemberRepository;
 import com.example.mall.util.RequestUtils;
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -21,7 +21,8 @@ import org.springframework.security.web.authentication.SimpleUrlAuthenticationSu
 
 @Slf4j
 @RequiredArgsConstructor
-public class UserAuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {       // 로그인 성공
+public class UserAuthenticationSuccessHandler extends
+    SimpleUrlAuthenticationSuccessHandler {       // 로그인 성공
 
     private final LoginHistoryRepository loginHistoryRepository;
     private final MemberRepository memberRepository;
@@ -29,18 +30,14 @@ public class UserAuthenticationSuccessHandler extends SimpleUrlAuthenticationSuc
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request,
-                                        HttpServletResponse response,
-                                        Authentication authentication) throws IOException, ServletException {
+        HttpServletResponse response,
+        Authentication authentication) throws IOException, ServletException {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         UserDetails userDetails = (UserDetails) principal;
 
         // 성공한 계정 아이디
         String userId = authentication.getName();
         System.out.println(userId);
-
-//        String id = memberRepository.detail(str);
-//        String id = memberService.detail(userId);
-//        MemberDto memberDto = memberService.detail(userId);
 
         Optional<Member> member = memberRepository.findByUserId(userId);
         Member m = member.get();
@@ -49,7 +46,7 @@ public class UserAuthenticationSuccessHandler extends SimpleUrlAuthenticationSuc
 
         log.info(userDetails.getUsername());
         log.info("user agent = " + RequestUtils.getUserAgent(request));     //멤버컨트롤러의
-        log.info("user ip = " +  RequestUtils.getClientIp(request));
+        log.info("user ip = " + RequestUtils.getClientIp(request));
 
         // 로그인 성공했으니 현재 시간을 넣어준다.
         LoginHistory loginHistory = LoginHistory.builder()
@@ -60,11 +57,13 @@ public class UserAuthenticationSuccessHandler extends SimpleUrlAuthenticationSuc
             .build();
         loginHistoryRepository.save(loginHistory);
 
-        setDefaultTargetUrl("/");   // 로그인 한 다음에 페이지
-
+        // 관리자인 경우는 관리자 메인 페이지로 이동하게 하기
+        if(memberRepository.findByUserId(userId).get().isAdminYn()){
+            setDefaultTargetUrl("/admin/main.do");   // 로그인 한 다음에 페이지
+        }else{
+            setDefaultTargetUrl("/");   // 로그인 한 다음에 페이지
+        }
 
         super.onAuthenticationSuccess(request, response, authentication);
     }
-
-
 }
