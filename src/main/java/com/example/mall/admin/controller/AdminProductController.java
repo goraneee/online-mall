@@ -20,14 +20,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 @RequiredArgsConstructor
 public class AdminProductController extends BaseController {
 
-
     private final AdminProductService adminProductService;
     private final ProductRepository productRepository;
 
     @GetMapping("/admin/product/list.do")
     public String list(HttpServletRequest request,
-                       Model model,
-                       ProductParam param) {
+        Model model,
+        ProductParam param) {
 
         param.init();   // 페이지 초기화
         List<ProductDto> list = adminProductService.list();
@@ -41,13 +40,12 @@ public class AdminProductController extends BaseController {
         }
         String queryString = param.getQueryString();
         String pagerHtml = getPaperHtml(totalCount,
-            param.getPageSize(),
-            param.getPageIndex(),
-            queryString);
+                                        param.getPageSize(),
+                                        param.getPageIndex(),
+                                        queryString);
         model.addAttribute("list", list);
         model.addAttribute("totalCount", totalCount);
         model.addAttribute("pager", pagerHtml);
-
         return "admin/product/list";
     }
 
@@ -61,19 +59,19 @@ public class AdminProductController extends BaseController {
 
     @GetMapping(value = {"/admin/product/add.do", "/admin/product/edit.do/{id}"})
     public String add(HttpServletRequest request,
-                       Model model,
-                       ProductInput parameter){
+        Model model,
+        ProductInput parameter) {
 
         boolean editMode = request.getRequestURI().contains("/edit.do");
         ProductDto detail = new ProductDto();
 
         // repository에 존재하지 않는 id의 경우 예외 처리를 한다.
-        if(editMode){
+        if (editMode) {
             long id = parameter.getId();
             Product existProduct = productRepository.findById(id).get();
-            ProductDto productDto =  ProductDto.of(existProduct);
+            ProductDto productDto = ProductDto.of(existProduct);
 
-            if(existProduct == null){
+            if (existProduct == null) {
 //                model.addAttribute("message", "수정할 상품 정보가 없습니다.");
                 System.out.println("수정할 상품 정보가 없습니다.");
                 return "admin/product/list";
@@ -85,22 +83,23 @@ public class AdminProductController extends BaseController {
         return "admin/product/add";
     }
 
+    // 상품 등록 및 수정
     @PostMapping(value = {"/admin/product/add.do", "/admin/product/edit.do/{id}"})
     public String addSubmit(Model model,
-                           ProductInput parameter,
-                           Principal principal,
-                           HttpServletRequest request) {
+        ProductInput parameter,
+        Principal principal,
+        HttpServletRequest request) {
 
         boolean editMode = request.getRequestURI().contains("/edit.do");
         boolean result = false;
 
-        if(!productRepository.existsById(parameter.getId())){
+        if (!productRepository.existsById(parameter.getId())) {
             System.out.println("존재하지 않는 상품 번호입니다.");
             return "admin/product/list";
         }
 
         // edit 모드
-        if(editMode) {
+        if (editMode) {
             long id = parameter.getId();
             Product existProduct = productRepository.findById(id).get();
             ProductDto productDto = ProductDto.of(existProduct);
@@ -113,7 +112,7 @@ public class AdminProductController extends BaseController {
                 model.addAttribute("detail", parameter);
                 return "admin/product/list";
             }
-        }else{      // 상품 추가
+        } else {      // 상품 추가
             result = adminProductService.add(parameter);
         }
         model.addAttribute("result", result);
@@ -126,13 +125,5 @@ public class AdminProductController extends BaseController {
         boolean result = adminProductService.delete(parameter.getId());
         return "redirect:/admin/product/list.do";
     }
-
-
-//    @PostMapping("/admin/product/update.do")
-//    public String update(Model model, ProductInput parameter) {
-//
-//        boolean result = productService.update(parameter);
-//        return "redirect:/admin/product/list.do";
-//    }
 
 }

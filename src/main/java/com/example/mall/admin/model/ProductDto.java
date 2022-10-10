@@ -29,15 +29,8 @@ public class ProductDto {
     @Enumerated(EnumType.STRING)
     private Category category;  // 딱 한개
 
-//    @ManyToOne(fetch = LAZY)
-//    @JoinColumn(name = "CART_ID")   // 외래 키 매핑 - CART 테이블의 PK id와 JOIN
-//    private Cart cart;
-
-    // 재고 관련 사항
-
-
+    // 재고 관련 필드
     private int stockQuantity;    // 재고 수량 => 주문할 마다 (-)
-
     private LocalDateTime stockedDt;  // 입고 예정일 => 한 번에 1000개씩 들어온다 가정?
 
     // 추가 컬럼
@@ -46,7 +39,6 @@ public class ProductDto {
     // 페이징 위한 컬럼
     long totalCount;
     long seq;
-
 
     // of() 오버로딩
     public static List<ProductDto> of(List<Product> productList) {
@@ -62,7 +54,7 @@ public class ProductDto {
 
     public static ProductDto of(Product parameter) {
         return ProductDto.builder()
-            .id(parameter.getId())  // ??? 맞나/
+            .id(parameter.getId())
             .category(parameter.getCategory())
 //            .cumulativeSales(parameter.getCumulativeSales())
             .price(parameter.getPrice())

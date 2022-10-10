@@ -61,6 +61,4 @@ private String userAgent;
 
     return ip;
     }
-
-
-    }
+}

@@ -1,17 +1,19 @@
 package com.example.mall.entity;
 
-import javax.persistence.ElementCollection;
+import com.example.mall.member.entity.Member;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+// 중간 테이블
+// member <--다대일--> cart <--일대다--> product
 
 @Entity
 @Builder
@@ -20,26 +22,17 @@ import lombok.NoArgsConstructor;
 @Data
 public class Cart {
 
-    @Id  @GeneratedValue
+    @Id
+    @GeneratedValue
+    @Column(name = "CART_ID")
     private Long id;
 
-    private String name;
-
-    @OneToOne(mappedBy = "cart")
+    @ManyToOne
     @JoinColumn
-    private Member member;  // mappedBy를 조인컬럼으로 바꾸면? mamberId  컬럼 생긴다.
+    private Member member;
 
-
-    // 오류난다.
-//    @OneToMany
-//    private List<Product> productList;  // 카트 안에 있는 상품 리스트 - 크기가 상품 개수
-
-
-    // 상품 총 가격은?
-    // 상품이 같은 상품이 여러 개 있을 수도 있으니 Map으로 해야되는지도 확인
-
-//    @OneToMany
-//    private Map<Product, Integer> productIntegerMap;
-
-
+    @ManyToOne
+    @JoinColumn
+    private Product product;
+    private Integer quantity;
 }

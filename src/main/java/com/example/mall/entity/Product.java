@@ -1,7 +1,5 @@
 package com.example.mall.entity;
 
-import static javax.persistence.FetchType.LAZY;
-
 import com.example.mall.entity.enumType.Category;
 import java.time.LocalDateTime;
 import javax.persistence.Entity;
@@ -36,8 +34,8 @@ public class Product {
     @Enumerated(EnumType.STRING)
     private Category category;  // 딱 한개
 
-    @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "CART_ID")   // 외래 키 매핑 - CART 테이블의 PK id와 JOIN
+    @ManyToOne
+    @JoinColumn(name = "CART_ID")
     private Cart cart;
 
     // 재고 관련 사항

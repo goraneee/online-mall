@@ -39,36 +39,35 @@ public class AdminOrderController extends BaseController {
         model.addAttribute("totalCount", totalCount);
         model.addAttribute("list", list);
 
-//        String queryString = param.getQueryString();
-//        String pagerHtml = getPaperHtml(totalCount, param.getPageSize(), param.getPageIndex(), queryString);
-//        model.addAttribute("pager", pagerHtml);
+        /* Paging
+        String queryString = param.getQueryString();
+        String pagerHtml = getPaperHtml(totalCount, param.getPageSize(), param.getPageIndex(), queryString);
+        model.addAttribute("pager", pagerHtml);
+        */
         return  "admin/order/list";
     }
 
+/* 관리자가 주문을 add, delete, update 할 일이 있을지는 모르겠다.
+    @PostMapping("/admin/order/add.do")
+    public String add(Model model, OrderInput parameter) {
 
-//    @PostMapping("/admin/order/add.do")
-//    public String add(Model model, OrderInput parameter) {
-//
-//        boolean result = orderService.add(parameter);
-//        return "redirect:/admin/order/list.do";
-//    }
-//
-//
-//    @PostMapping("/admin/order/delete.do")
-//    public String del(Model model, OrderInput parameter) {
-//
-//        boolean result = orderService.delete(parameter.getId());
-//        return "redirect:/admin/product/list.do";
-//
-//    }
-//
-//    @PostMapping("/admin/order/update.do")
-//    public String update(Model model, OrderInput parameter) {
-//
-//        boolean result = orderService.update(parameter);
-//        return "redirect:/admin/product/list.do";
-//    }
+        boolean result = orderService.add(parameter);
+        return "redirect:/admin/order/list.do";
+    }
 
+    @PostMapping("/admin/order/delete.do")
+    public String del(Model model, OrderInput parameter) {
+
+        boolean result = orderService.delete(parameter.getId());
+        return "redirect:/admin/product/list.do";
+    }
+
+    @PostMapping("/admin/order/update.do")
+    public String update(Model model, OrderInput parameter) {
+        boolean result = orderService.update(parameter);
+        return "redirect:/admin/product/list.do";
+    }
+*/
 
 
 }

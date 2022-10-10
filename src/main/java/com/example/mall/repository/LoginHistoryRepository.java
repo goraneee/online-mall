@@ -8,7 +8,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 public interface LoginHistoryRepository extends JpaRepository<LoginHistory, Long> {
-//    Optional<List<LoginHistory>> findLoginHistoriesBy();
+
+    //    Optional<List<LoginHistory>> findLoginHistoriesBy();
     @Query(nativeQuery = true,
         value = " select * from login_history " +
             " where user_id = :userId " +
